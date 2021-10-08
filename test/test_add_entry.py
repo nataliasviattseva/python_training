@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from model.contact import Contact
+from model.entry import Contact
 
 
-def test_add_contact(app):
+def test_add_entry(app):
     app.session.login(username="admin", password="secret")
-    app.contact.create_contact(
+    app.entry.create_entry(
         Contact(first_name="FirstName",
                 middle_name="MiddleName",
                 last_name="LastName",
@@ -31,9 +31,9 @@ def test_add_contact(app):
                 ayear="2001"))
     app.session.logout()
 
-def test_add_empty_contact(app):
+def test_add_empty_entry(app):
     app.session.login(username="admin", password="secret")
-    app.contact.create_contact(
+    app.entry.create_entry(
         Contact(first_name="",
                 middle_name="",
                 last_name="",

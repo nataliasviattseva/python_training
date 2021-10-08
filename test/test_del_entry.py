@@ -1,6 +1,6 @@
 
 
-def test_delete_first_contact(app):
+def test_delete_first_entry(app):
     app.session.login(username="admin", password="secret")
-    app.contact.delete_first_contact()
+    app.entry.delete_first_entry()
     app.session.logout()

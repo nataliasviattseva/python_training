@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from model.contact import Contact
+from model.entry import Contact
 
 
-def test_edit_first_contact(app):
+def test_edit_first_entry(app):
     app.session.login(username="admin", password="secret")
-    app.contact.edit_first_contact(
+    app.entry.edit_first_entry(
         Contact(first_name="FirstNameEdited",
                 middle_name="MiddleNameEdited",
                 last_name="LastNameEdited",
