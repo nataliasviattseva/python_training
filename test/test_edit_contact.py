@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+from model.contact import Contact
+
+
+def test_edit_first_contact(app):
+    app.session.login(username="admin", password="secret")
+    app.contact.edit_first_contact(
+        Contact(first_name="FirstNameEdited",
+                middle_name="MiddleNameEdited",
+                last_name="LastNameEdited",
+                nickname="nicknameEdited",
+                title="Mr.Edited",
+                company="nonameEdited",
+                address="1234 Address line 1 Edited\nAddress line 2 Edited",
+                phone_home="12345678 Edited",
+                phone_mobile="23456789 Edited",
+                phone_work="34567890 Edited",
+                fax="45678901 Edited",
+                email1="email1Edited@mail.com",
+                email2="email2Edited@mail.com",
+                email3="email2Edited@mail.com",
+                homepage="www.homepageEdited.com",
+                address2="123 Secondary Address line 1 Edited\nSecondary Address line 2 Edited",
+                phone2_home="homeEdited",
+                notes="notesEdited",
+                bday="2",
+                bmonth="February",
+                byear="2001",
+                aday="6",
+                amonth="March",
+                ayear="2002"))
+    app.session.logout()
