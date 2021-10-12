@@ -3,7 +3,6 @@ from model.entry import Contact
 
 
 def test_edit_first_entry(app):
-    app.session.login(username="admin", password="secret")
     app.entry.edit_first_entry(
         Contact(first_name="FirstNameEdited",
                 middle_name="MiddleNameEdited",
@@ -29,4 +28,3 @@ def test_edit_first_entry(app):
                 aday="6",
                 amonth="March",
                 ayear="2002"))
-    app.session.logout()

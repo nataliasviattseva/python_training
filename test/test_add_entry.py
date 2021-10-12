@@ -3,7 +3,6 @@ from model.entry import Contact
 
 
 def test_add_entry(app):
-    app.session.login(username="admin", password="secret")
     app.entry.create_entry(
         Contact(first_name="FirstName",
                 middle_name="MiddleName",
@@ -29,10 +28,9 @@ def test_add_entry(app):
                 aday="5",
                 amonth="February",
                 ayear="2001"))
-    app.session.logout()
+
 
 def test_add_empty_entry(app):
-    app.session.login(username="admin", password="secret")
     app.entry.create_entry(
         Contact(first_name="",
                 middle_name="",
@@ -58,4 +56,3 @@ def test_add_empty_entry(app):
                 aday="",
                 amonth="-",
                 ayear="-"))
-    app.session.logout()
