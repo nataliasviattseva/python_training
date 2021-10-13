@@ -1,88 +1,89 @@
 from selenium.webdriver.support.ui import Select
 
+
 class EntryHelper:
 
     def __init__(self, app):
         self.app = app
 
-    def create_entry(self, entry):
+    def create_entry(self, entry_data):
         wd = self.app.wd
         # init entry creation
         wd.find_element_by_link_text("add new").click()
-        self.fill_entry_form(entry, wd)
+        self.fill_entry_form(entry_data)
         # submit entry creation
-        wd.find_element_by_name("submit").click()
+        self.perform_action("submit")
         self.return_to_home_page()
 
-    def edit_first_entry(self, entry):
+    def edit_first_entry(self, new_entry_data):
         wd = self.app.wd
         self.return_to_home_page()
-        # select first entry
-        wd.find_element_by_css_selector("img[title=\"Edit\"]").click()
-        self.fill_entry_form(entry, wd)
-        # submit entry creation
-        wd.find_element_by_name("update").click()
+        self.select_first_entry_for_edit()
+        self.fill_entry_form(new_entry_data)
+        self.perform_action("update")
         self.return_to_home_page()
 
-    def fill_entry_form(self, entry, wd):
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(entry.first_name)
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(entry.middle_name)
-        wd.find_element_by_name("lastname").clear()
-        wd.find_element_by_name("lastname").send_keys(entry.last_name)
-        wd.find_element_by_name("nickname").clear()
-        wd.find_element_by_name("nickname").send_keys(entry.nickname)
-        wd.find_element_by_name("title").clear()
-        wd.find_element_by_name("title").send_keys(entry.title)
-        wd.find_element_by_name("company").clear()
-        wd.find_element_by_name("company").send_keys(entry.company)
-        wd.find_element_by_name("address").clear()
-        wd.find_element_by_name("address").send_keys(entry.address)
-        wd.find_element_by_name("home").clear()
-        wd.find_element_by_name("home").send_keys(entry.phone_home)
-        wd.find_element_by_name("mobile").clear()
-        wd.find_element_by_name("mobile").send_keys(entry.phone_mobile)
-        wd.find_element_by_name("work").clear()
-        wd.find_element_by_name("work").send_keys(entry.phone_work)
-        wd.find_element_by_name("fax").clear()
-        wd.find_element_by_name("fax").send_keys(entry.fax)
-        wd.find_element_by_name("email").clear()
-        wd.find_element_by_name("email").send_keys(entry.email1)
-        wd.find_element_by_name("email2").clear()
-        wd.find_element_by_name("email2").send_keys(entry.email2)
-        wd.find_element_by_name("email3").clear()
-        wd.find_element_by_name("email3").send_keys(entry.email3)
-        wd.find_element_by_name("homepage").clear()
-        wd.find_element_by_name("homepage").send_keys(entry.homepage)
+    def select_first_entry_for_edit(self):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("img[title=\"Edit\"]").click()
+
+    def fill_entry_form(self, entry):
+        self.change_field_value("firstname", entry.first_name)
+        self.change_field_value("middlename", entry.middle_name)
+        self.change_field_value("lastname", entry.last_name)
+        self.change_field_value("nickname", entry.nickname)
+        self.change_field_value("title", entry.title)
+        self.change_field_value("company", entry.company)
+        self.change_field_value("address", entry.address)
+        self.change_field_value("home", entry.phone_home)
+        self.change_field_value("mobile", entry.phone_mobile)
+        self.change_field_value("work", entry.phone_work)
+        self.change_field_value("fax", entry.fax)
+        self.change_field_value("email", entry.email1)
+        self.change_field_value("email2", entry.email2)
+        self.change_field_value("email3", entry.email3)
+        self.change_field_value("homepage", entry.homepage)
         # enter birthday
-        Select(wd.find_element_by_name("bday")).select_by_visible_text(entry.bday)
-        Select(wd.find_element_by_name("bmonth")).select_by_visible_text(entry.bmonth)
-        wd.find_element_by_name("byear").clear()
-        wd.find_element_by_name("byear").send_keys(entry.byear)
+        self.change_select_value("bday", entry.bday)
+        self.change_select_value("bmonth", entry.bmonth)
+        self.change_field_value("byear", entry.byear)
         # enter anniversary
-        Select(wd.find_element_by_name("aday")).select_by_visible_text(entry.aday)
-        Select(wd.find_element_by_name("amonth")).select_by_visible_text(entry.amonth)
-        wd.find_element_by_name("ayear").clear()
-        wd.find_element_by_name("ayear").send_keys(entry.ayear)
+        self.change_select_value("aday", entry.aday)
+        self.change_select_value("amonth", entry.amonth)
+        self.change_field_value("ayear", entry.ayear)
         # enter secondary information
-        wd.find_element_by_name("address2").clear()
-        wd.find_element_by_name("address2").send_keys(entry.address2)
-        wd.find_element_by_name("phone2").clear()
-        wd.find_element_by_name("phone2").send_keys(entry.phone2_home)
-        wd.find_element_by_name("notes").clear()
-        wd.find_element_by_name("notes").send_keys(entry.notes)
+        self.change_field_value("address2", entry.address2)
+        self.change_field_value("phone2", entry.phone2_home)
+        self.change_field_value("notes", entry.notes)
+
+    def change_field_value(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(text)
+
+    def change_select_value(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+            Select(wd.find_element_by_name(field_name)).select_by_visible_text(text)
 
     def delete_first_entry(self):
         wd = self.app.wd
         self.return_to_home_page()
-        # select first entry
-        wd.find_element_by_name("selected[]").click()
+        self.select_first_entry()
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         self.return_to_home_page()
 
+    def select_first_entry(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+
     def return_to_home_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home").click()
+
+    def perform_action(self, action):
+        wd = self.app.wd
+        wd.find_element_by_name(action).click()

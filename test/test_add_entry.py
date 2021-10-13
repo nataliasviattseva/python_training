@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from model.entry import Contact
+from model.entry import Entry
 
 
 def test_add_entry(app):
     app.entry.create_entry(
-        Contact(first_name="FirstName",
+        Entry(first_name="FirstName",
                 middle_name="MiddleName",
                 last_name="LastName",
                 nickname="nickname",
@@ -32,7 +32,7 @@ def test_add_entry(app):
 
 def test_add_empty_entry(app):
     app.entry.create_entry(
-        Contact(first_name="",
+        Entry(first_name="",
                 middle_name="",
                 last_name="",
                 nickname="",
@@ -53,6 +53,33 @@ def test_add_empty_entry(app):
                 bday="",
                 bmonth="-",
                 byear="-",
+                aday="",
+                amonth="-",
+                ayear="-"))
+
+def test_add_entry_with_main_info(app):
+    app.entry.create_entry(
+        Entry(first_name="Ivanov",
+                middle_name="",
+                last_name="Ivan",
+                nickname="",
+                title="",
+                company="",
+                address="44 Allee de Rue",
+                phone_home="07.77.77.77.77",
+                phone_mobile="",
+                phone_work="",
+                fax="",
+                email1="",
+                email2="",
+                email3="",
+                homepage="",
+                address2="",
+                phone2_home="",
+                notes="",
+                bday="3",
+                bmonth="April",
+                byear="2000",
                 aday="",
                 amonth="-",
                 ayear="-"))
