@@ -82,7 +82,8 @@ class EntryHelper:
 
     def return_to_home_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home").click()
+        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("searchstring")) > 0):
+            wd.find_element_by_link_text("home").click()
 
     def perform_action(self, action):
         wd = self.app.wd
