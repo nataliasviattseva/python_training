@@ -3,6 +3,8 @@ from model.entry import Entry
 
 
 def test_edit_first_entry(app):
+    if app.entry.count() == 0:
+        app.entry.create_entry(Entry(first_name="test"))
     app.entry.edit_first_entry(
         Entry(first_name="FirstNameEdited",
                 middle_name="MiddleNameEdited",

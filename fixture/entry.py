@@ -87,3 +87,8 @@ class EntryHelper:
     def perform_action(self, action):
         wd = self.app.wd
         wd.find_element_by_name(action).click()
+
+    def count(self):
+        wd = self.app.wd
+        self.return_to_home_page()
+        return len(wd.find_elements_by_name("selected[]"))
