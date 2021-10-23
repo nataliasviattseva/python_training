@@ -1,4 +1,5 @@
 from selenium.webdriver.support.ui import Select
+from model.entry import Entry
 
 
 class EntryHelper:
@@ -93,3 +94,14 @@ class EntryHelper:
         wd = self.app.wd
         self.return_to_home_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_entries_list(self):
+        wd = self.app.wd
+        self.return_to_home_page()
+        entries = []
+        for element in wd.find_elements_by_xpath("//tr[@name='entry']/td[@class='center']/input/../.."):
+            entry_id = element.find_element_by_xpath("//input").get_attribute("value")
+            cell1 = element.find_element_by_xpath("//td[2]").text
+            cell2 = element.find_element_by_xpath("//td[3]").text
+            entries.append(Entry(first_name=cell1, last_name=cell2, id=entry_id))
+        return entries
