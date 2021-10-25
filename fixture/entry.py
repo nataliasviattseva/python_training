@@ -99,9 +99,9 @@ class EntryHelper:
         wd = self.app.wd
         self.return_to_home_page()
         entries = []
-        for element in wd.find_elements_by_xpath("//tr[@name='entry']/td[@class='center']/input/../.."):
-            entry_id = element.find_element_by_xpath("//input").get_attribute("value")
-            cell1 = element.find_element_by_xpath("//td[2]").text
-            cell2 = element.find_element_by_xpath("//td[3]").text
+        for element in wd.find_elements_by_name("entry"):
+            entry_id = element.find_element_by_name("selected[]").get_attribute("value")
+            cell1 = element.find_elements_by_css_selector("td")[1].text
+            cell2 = element.find_elements_by_css_selector("td")[2].text
             entries.append(Entry(first_name=cell1, last_name=cell2, id=entry_id))
         return entries
