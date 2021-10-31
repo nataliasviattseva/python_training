@@ -101,7 +101,7 @@ class EntryHelper:
         entries = []
         for element in wd.find_elements_by_name("entry"):
             entry_id = element.find_element_by_name("selected[]").get_attribute("value")
-            cell1 = element.find_elements_by_css_selector("td")[1].text
-            cell2 = element.find_elements_by_css_selector("td")[2].text
+            cell1 = element.find_elements_by_css_selector("td")[2].text
+            cell2 = element.find_elements_by_css_selector("td")[1].text
             entries.append(Entry(first_name=cell1, last_name=cell2, id=entry_id))
         return entries

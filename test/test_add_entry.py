@@ -75,7 +75,7 @@ def test_add_entry_with_main_info(app):
                     nickname="",
                     title="",
                     company="",
-                    address="44 Allee de Rue",
+                    address="44 Allee de la Rue",
                     phone_home="07.77.77.77.77",
                     phone_mobile="",
                     phone_work="",
