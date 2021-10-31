@@ -18,17 +18,23 @@ class EntryHelper:
         self.entry_cache = None
 
     def edit_first_entry(self, new_entry_data):
+        self.edit_entry_by_index(0)
+
+    def edit_entry_by_index(self, index, new_entry_data):
         wd = self.app.wd
         self.return_to_home_page()
-        self.select_first_entry_for_edit()
+        self.select_entry_by_index_for_edit(index)
         self.fill_entry_form(new_entry_data)
         self.perform_action("update")
         self.return_to_home_page()
         self.entry_cache = None
 
     def select_first_entry_for_edit(self):
+        self.select_entry_by_index_for_edit(0)
+
+    def select_entry_by_index_for_edit(self, index):
         wd = self.app.wd
-        wd.find_element_by_css_selector("img[title=\"Edit\"]").click()
+        wd.find_elements_by_css_selector("img[title=\"Edit\"]")[index].click()
 
     def fill_entry_form(self, entry):
         self.change_field_value("firstname", entry.first_name)
@@ -71,9 +77,12 @@ class EntryHelper:
             Select(wd.find_element_by_name(field_name)).select_by_visible_text(text)
 
     def delete_first_entry(self):
+        self.delete_entry_by_index(0)
+
+    def delete_entry_by_index(self, index):
         wd = self.app.wd
         self.return_to_home_page()
-        self.select_first_entry()
+        self.select_entry_by_index(index)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
@@ -81,8 +90,11 @@ class EntryHelper:
         self.entry_cache = None
 
     def select_first_entry(self):
+        self.delete_entry_by_index(0)
+
+    def select_entry_by_index(self, index):
         wd = self.app.wd
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
 
     def return_to_home_page(self):
         wd = self.app.wd

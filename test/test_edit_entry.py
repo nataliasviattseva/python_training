@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
 from model.entry import Entry
+from random import randrange
 
 
-def test_edit_first_entry(app):
+def test_edit_some_entry(app):
     if app.entry.count() == 0:
         app.entry.create_entry(Entry(first_name="test"))
     old_entries = app.entry.get_entries_list()
+    index = randrange(len(old_entries))
     entry = Entry(first_name="FirstNameEdited",
               middle_name="MiddleNameEdited",
               last_name="LastNameEdited",
@@ -30,9 +31,9 @@ def test_edit_first_entry(app):
               aday="6",
               amonth="March",
               ayear="2002")
-    entry.id = old_entries[0].id
-    app.entry.edit_first_entry(entry)
+    entry.id = old_entries[index].id
+    app.entry.edit_entry_by_index(index, entry)
     assert len(old_entries) == app.entry.count()
     new_entries = app.entry.get_entries_list()
-    old_entries[0] = entry
+    old_entries[index] = entry
     assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)
