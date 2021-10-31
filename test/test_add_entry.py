@@ -29,8 +29,8 @@ def test_add_entry(app):
                     amonth="February",
                     ayear="2001")
       app.entry.create_entry(entry)
+      assert len(old_entries) + 1 == app.entry.count()
       new_entries = app.entry.get_entries_list()
-      assert len(old_entries) + 1 == len(new_entries)
       old_entries.append(entry)
       assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)
 
@@ -62,8 +62,8 @@ def test_add_empty_entry(app):
                     amonth="-",
                     ayear="-")
       app.entry.create_entry(entry)
+      assert len(old_entries) + 1 == app.entry.count()
       new_entries = app.entry.get_entries_list()
-      assert len(old_entries) + 1 == len(new_entries)
       old_entries.append(entry)
       assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)
 
@@ -94,7 +94,7 @@ def test_add_entry_with_main_info(app):
                     amonth="-",
                     ayear="-")
       app.entry.create_entry(entry)
+      assert len(old_entries) + 1 == app.entry.count()
       new_entries = app.entry.get_entries_list()
-      assert len(old_entries) + 1 == len(new_entries)
       old_entries.append(entry)
       assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)

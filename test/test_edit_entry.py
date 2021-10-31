@@ -32,7 +32,7 @@ def test_edit_first_entry(app):
               ayear="2002")
     entry.id = old_entries[0].id
     app.entry.edit_first_entry(entry)
+    assert len(old_entries) == app.entry.count()
     new_entries = app.entry.get_entries_list()
-    assert len(old_entries) == len(new_entries)
     old_entries[0] = entry
     assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)

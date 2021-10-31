@@ -15,6 +15,7 @@ class EntryHelper:
         # submit entry creation
         self.perform_action("submit")
         self.return_to_home_page()
+        self.entry_cache = None
 
     def edit_first_entry(self, new_entry_data):
         wd = self.app.wd
@@ -23,6 +24,7 @@ class EntryHelper:
         self.fill_entry_form(new_entry_data)
         self.perform_action("update")
         self.return_to_home_page()
+        self.entry_cache = None
 
     def select_first_entry_for_edit(self):
         wd = self.app.wd
@@ -76,6 +78,7 @@ class EntryHelper:
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         self.return_to_home_page()
+        self.entry_cache = None
 
     def select_first_entry(self):
         wd = self.app.wd
@@ -95,13 +98,16 @@ class EntryHelper:
         self.return_to_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    entry_cache = None
+
     def get_entries_list(self):
-        wd = self.app.wd
-        self.return_to_home_page()
-        entries = []
-        for element in wd.find_elements_by_name("entry"):
-            entry_id = element.find_element_by_name("selected[]").get_attribute("value")
-            cell1 = element.find_elements_by_css_selector("td")[2].text
-            cell2 = element.find_elements_by_css_selector("td")[1].text
-            entries.append(Entry(first_name=cell1, last_name=cell2, id=entry_id))
-        return entries
+        if self.entry_cache is None:
+            wd = self.app.wd
+            self.return_to_home_page()
+            self.entry_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                entry_id = element.find_element_by_name("selected[]").get_attribute("value")
+                cell1 = element.find_elements_by_css_selector("td")[2].text
+                cell2 = element.find_elements_by_css_selector("td")[1].text
+                self.entry_cache.append(Entry(first_name=cell1, last_name=cell2, id=entry_id))
+        return list(self.entry_cache)
