@@ -14,10 +14,12 @@ class Entry:
                  phone_home=None,
                  phone_mobile=None,
                  phone_work=None,
+                 all_phones_from_home_page=None,
                  fax=None,
                  email1=None,
                  email2=None,
                  email3=None,
+                 all_emails_from_home_page=None,
                  homepage=None,
                  address2=None,
                  phone2_home=None,
@@ -39,10 +41,12 @@ class Entry:
         self.phone_home = phone_home
         self.phone_mobile = phone_mobile
         self.phone_work = phone_work
+        self.all_phones_from_home_page = all_phones_from_home_page
         self.fax = fax
         self.email1 = email1
         self.email2 = email2
         self.email3 = email3
+        self.all_emails_from_home_page = all_emails_from_home_page
         self.homepage = homepage
         self.address2 = address2
         self.phone2_home = phone2_home

@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 from model.entry import Entry
+import re
 
 
 class EntryHelper:
@@ -21,7 +22,6 @@ class EntryHelper:
         self.edit_entry_by_index(0)
 
     def edit_entry_by_index(self, index, new_entry_data):
-        wd = self.app.wd
         self.return_to_home_page()
         self.select_entry_by_index_for_edit(index)
         self.fill_entry_form(new_entry_data)
@@ -34,12 +34,22 @@ class EntryHelper:
 
     def select_entry_by_index_for_edit(self, index):
         wd = self.app.wd
-        wd.find_elements_by_css_selector("img[title=\"Edit\"]")[index].click()
+        self.return_to_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def select_entry_by_index_for_view(self, index):
+        wd = self.app.wd
+        self.return_to_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
 
     def fill_entry_form(self, entry):
-        self.change_field_value("firstname", entry.first_name)
-        self.change_field_value("middlename", entry.middle_name)
-        self.change_field_value("lastname", entry.last_name)
+        self.change_field_value("firstname", entry.firstname)
+        self.change_field_value("middlename", entry.middlename)
+        self.change_field_value("lastname", entry.lastname)
         self.change_field_value("nickname", entry.nickname)
         self.change_field_value("title", entry.title)
         self.change_field_value("company", entry.company)
@@ -118,8 +128,63 @@ class EntryHelper:
             self.return_to_home_page()
             self.entry_cache = []
             for element in wd.find_elements_by_name("entry"):
-                entry_id = element.find_element_by_name("selected[]").get_attribute("value")
-                cell1 = element.find_elements_by_css_selector("td")[2].text
-                cell2 = element.find_elements_by_css_selector("td")[1].text
-                self.entry_cache.append(Entry(first_name=cell1, last_name=cell2, id=entry_id))
+                cells = element.find_elements_by_tag_name("td")
+                entry_id = cells[0].find_element_by_name("selected[]").get_attribute("value")
+                first_name = cells[2].text
+                last_name = cells[1].text
+                address = cells[3].text
+                all_emails = cells[4].text
+                all_phones = cells[5].text
+                self.entry_cache.append(Entry(first_name=first_name,
+                                              last_name=last_name,
+                                              id=entry_id,
+                                              address=address,
+                                              all_emails_from_home_page=all_emails,
+                                              email1=all_emails[0],
+                                              email2=all_emails[1],
+                                              email3=all_emails[2],
+                                              all_phones_from_home_page=all_phones,
+                                              phone_home=all_phones[0],
+                                              phone_mobile=all_phones[1],
+                                              phone_work=all_phones[2],
+                                              phone2_home=all_phones[3]))
         return list(self.entry_cache)
+
+    def get_entry_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.select_entry_by_index_for_edit(index)
+        first_name = wd.find_element_by_name("firstname").get_attribute("value")
+        last_name = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
+        email1 = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
+        phone_home = wd.find_element_by_name("home").get_attribute("value")
+        phone_mobile = wd.find_element_by_name("mobile").get_attribute("value")
+        phone_work = wd.find_element_by_name("work").get_attribute("value")
+        phone2_home = wd.find_element_by_name("phone2").get_attribute("value")
+        return Entry(first_name=first_name,
+                     last_name=last_name,
+                     id=id,
+                     address=address,
+                     email1=email1,
+                     email2=email2,
+                     email3=email3,
+                     phone_home=phone_home,
+                     phone_mobile=phone_mobile,
+                     phone_work=phone_work,
+                     phone2_home=phone2_home)
+
+    def get_entry_info_from_view_page(self, index):
+        wd = self.app.wd
+        self.select_entry_by_index_for_view(index)
+        text = wd.find_element_by_id("content").text
+        phone_home = re.search("H: (.*)", text).group(1)
+        phone_mobile = re.search("M: (.*)", text).group(1)
+        phone_work = re.search("W: (.*)", text).group(1)
+        phone2_home = re.search("P: (.*)", text).group(1)
+        return Entry(phone_home=phone_home,
+                     phone_mobile=phone_mobile,
+                     phone_work=phone_work,
+                     phone2_home=phone2_home)
