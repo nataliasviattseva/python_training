@@ -47,9 +47,9 @@ class EntryHelper:
         cell.find_element_by_tag_name("a").click()
 
     def fill_entry_form(self, entry):
-        self.change_field_value("firstname", entry.firstname)
-        self.change_field_value("middlename", entry.middlename)
-        self.change_field_value("lastname", entry.lastname)
+        self.change_field_value("firstname", entry.first_name)
+        self.change_field_value("middlename", entry.middle_name)
+        self.change_field_value("lastname", entry.last_name)
         self.change_field_value("nickname", entry.nickname)
         self.change_field_value("title", entry.title)
         self.change_field_value("company", entry.company)
@@ -140,14 +140,7 @@ class EntryHelper:
                                               id=entry_id,
                                               address=address,
                                               all_emails_from_home_page=all_emails,
-                                              email1=all_emails[0],
-                                              email2=all_emails[1],
-                                              email3=all_emails[2],
-                                              all_phones_from_home_page=all_phones,
-                                              phone_home=all_phones[0],
-                                              phone_mobile=all_phones[1],
-                                              phone_work=all_phones[2],
-                                              phone2_home=all_phones[3]))
+                                              all_phones_from_home_page=all_phones))
         return list(self.entry_cache)
 
     def get_entry_info_from_edit_page(self, index):
