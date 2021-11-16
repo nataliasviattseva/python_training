@@ -5,7 +5,7 @@ import string
 
 
 def random_string(prefix, maxlen):
-    symbols = string.ascii_letters + string.digits + string.punctuation + " " * 10
+    symbols = string.ascii_letters + string.digits + string.punctuation + " " * 10+ string.digits + string.punctuation + " " * 10
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
@@ -51,7 +51,7 @@ testdata = [Entry(first_name="",
                        nickname=random_string("nickname", 5),
                        title=random_string("Mr.", 1),
                        company=random_string("noname", 10),
-                       address="1234 Address line 1\nAddress line 2",
+                       address=random_string("123 address", 50),
                        phone_home=random_phone(10),
                        phone_mobile=random_phone(10),
                        phone_work=random_phone(10),
@@ -60,7 +60,7 @@ testdata = [Entry(first_name="",
                        email2=random_email(10, 10, 3),
                        email3=random_email(10, 10, 3),
                        homepage="www.homepage.com",
-                       address2=random_string("123 address", 50),
+                       address2=random_string("456 address", 50),
                        phone2_home=random_phone(10),
                        notes=random_string("notes", 50),
                        bday="1",
