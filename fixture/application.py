@@ -19,7 +19,7 @@ class Application:
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
         self.entry = EntryHelper(self)
-        self.base_url=base_url
+        self.base_url = base_url
 
     def is_valid(self):
         try:
