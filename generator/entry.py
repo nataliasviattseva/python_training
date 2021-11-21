@@ -12,7 +12,7 @@ except getopt.GetoptError as err:
     getopt.usage()
     sys.exit(2)
 
-n = 7
+n = 3
 f = "data/entries.json"
 
 for o, a in opts:
@@ -57,10 +57,10 @@ testdata = [Entry(first_name="",
                   address2="",
                   phone2_home="",
                   notes="",
-                  bday="",
+                  bday="-",
                   bmonth="-",
                   byear="-",
-                  aday="",
+                  aday="-",
                   amonth="-",
                   ayear="-")
             ] + [Entry(first_name=random_string("FirstName", 10),
@@ -87,7 +87,7 @@ testdata = [Entry(first_name="",
                        aday="5",
                        amonth="February",
                        ayear="2001")
-                 for i in range(5)
+                 for i in range(n)
                  ]
 
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
