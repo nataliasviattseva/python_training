@@ -99,12 +99,26 @@ class EntryHelper:
         self.return_to_home_page()
         self.entry_cache = None
 
+    def delete_entry_by_id(self, id):
+        wd = self.app.wd
+        self.return_to_home_page()
+        self.select_entry_by_id(id)
+        # submit deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+        self.return_to_home_page()
+        self.entry_cache = None
+
     def select_first_entry(self):
         self.delete_entry_by_index(0)
 
     def select_entry_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_entry_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
     def return_to_home_page(self):
         wd = self.app.wd
