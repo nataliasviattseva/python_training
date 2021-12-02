@@ -1,4 +1,5 @@
 import pymysql.cursors
+# import mysql.connector
 from model.group import Group
 from model.entry import Entry
 
@@ -10,6 +11,7 @@ class DbFixture:
         self.user = user
         self.password = password
         self.connection = pymysql.connect(host=host, database=name, user=user, password=password, autocommit=True)
+        # self.connection.autocommit = True # doesn't work, autocommit works only as an option above
 
     def get_group_list(self):
         list = []
@@ -27,10 +29,61 @@ class DbFixture:
         list = []
         cursor = self.connection.cursor()
         try:
-            cursor.execute("select id, firstname, lastname from addressbook")
+            cursor.execute("select id, "
+                           "firstname, "
+                           "middlename, "
+                           "lastname, "
+                           "nickname, "
+                           "company, "
+                           "title, "
+                           "address, "
+                           "home, "
+                           "mobile, "
+                           "work, "
+                           "fax, "
+                           "email, "
+                           "email2, "
+                           "email3, "
+                           "homepage, "
+                           "bday, "
+                           "bmonth, "
+                           "byear, "
+                           "aday, "
+                           "amonth, "
+                           "ayear, "
+                           "address2, "
+                           "phone2, "
+                           "notes "
+                           "from addressbook where deprecated='0000-00-00 00:00:00'")
             for row in cursor:
-                (id, firstname, lastname) = row
-                list.append(Entry(id=str(id), first_name=firstname, last_name=lastname))
+                (id, firstname, middlename, lastname, nickname, company, title, address,
+                 home, mobile, work, fax, email, email2, email3, homepage, bday, bmonth,
+                 byear, aday, amonth, ayear, address2, phone2, notes) = row
+                list.append(Entry(id=str(id),
+                                  first_name=firstname,
+                                  middle_name=middlename,
+                                  last_name=lastname,
+                                  nickname=nickname,
+                                  company=company,
+                                  title=title,
+                                  address=address,
+                                  phone_home=home,
+                                  phone_mobile=mobile,
+                                  phone_work=work,
+                                  fax=fax,
+                                  email1=email,
+                                  email2=email2,
+                                  email3=email3,
+                                  homepage=homepage,
+                                  bday=bday,
+                                  bmonth=bmonth,
+                                  byear=byear,
+                                  aday=aday,
+                                  amonth=amonth,
+                                  ayear=ayear,
+                                  address2=address2,
+                                  phone2_home=phone2,
+                                  notes=notes))
         finally:
             cursor.close()
         return list

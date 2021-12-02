@@ -29,6 +29,16 @@ class EntryHelper:
         self.return_to_home_page()
         self.entry_cache = None
 
+    def edit_entry_by_id(self, id, new_entry_data):
+        wd = self.app.wd
+        self.return_to_home_page()
+        self.select_entry_by_id_for_edit(id)
+        self.fill_entry_form(new_entry_data)
+        self.perform_action("update")
+        wd.find_element_by_css_selector("div.msgbox") # wait the message about deletion
+        self.return_to_home_page()
+        self.entry_cache = None
+
     def select_first_entry_for_edit(self):
         self.select_entry_by_index_for_edit(0)
 
@@ -38,6 +48,13 @@ class EntryHelper:
         row = wd.find_elements_by_name("entry")[index]
         cell = row.find_elements_by_tag_name("td")[7]
         cell.find_element_by_tag_name("a").click()
+
+    def select_entry_by_id_for_edit(self, id):
+        wd = self.app.wd
+        self.return_to_home_page()
+        wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
+        # cell = row.find_element_by_tag_name("td")[7]
+        # cell.find_element_by_tag_name("a").click()
 
     def select_entry_by_index_for_view(self, index):
         wd = self.app.wd
@@ -106,6 +123,7 @@ class EntryHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        wd.find_element_by_css_selector("div.msgbox") # wait the message about deletion
         self.return_to_home_page()
         self.entry_cache = None
 

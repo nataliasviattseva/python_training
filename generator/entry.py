@@ -93,10 +93,10 @@ testdata = [Entry(first_name="",
                        phone2_home=random_phone(10),
                        notes=random_string("notes", 50),
                        bday=str(random.choice(range(0, 32))),
-                       bmonth=random_month,
+                       bmonth=random_month(),
                        byear=random.choice(range(1900, datetime.now().year)),
                        aday=str(random.choice(range(0, 32))),
-                       amonth=random_month,
+                       amonth=random_month(),
                        ayear=random.choice(range(1900, datetime.now().year)))
                  for i in range(n)
                  ]
