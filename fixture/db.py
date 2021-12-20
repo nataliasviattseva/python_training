@@ -13,7 +13,7 @@ class DbFixture:
         self.connection = pymysql.connect(host=host, database=name, user=user, password=password, autocommit=True)
         # self.connection.autocommit = True # doesn't work, autocommit works only as an option above
 
-    def get_group_list(self):
+    def get_groups_list(self):
         list = []
         cursor = self.connection.cursor()
         try:

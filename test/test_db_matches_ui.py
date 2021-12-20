@@ -11,6 +11,6 @@ def test_group_list(app, db):
     # assert sorted(ui_list, key=Group.id_or_max) == sorted(db_list, key=Group.id_or_max)
 
     # demonstration of loading speed from ui and db
-    print(timeit(lambda: app.group.get_group_list(), number=1))
-    print(timeit(lambda: map(clean, db.get_group_list()), number=1000))
+    print(timeit(lambda: app.group.get_groups_list(), number=1))
+    print(timeit(lambda: map(clean, db.get_groups_list()), number=1000))
     assert False  # sorted(ui_list, key=Group.id_or_max) == sorted(db_list, key=Group.id_or_max)
