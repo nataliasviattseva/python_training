@@ -123,7 +123,7 @@ class EntryHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
-        wd.find_element_by_css_selector("div.msgbox") # wait the message about deletion
+        wd.find_element_by_css_selector("div.msgbox")  # wait the message about deletion
         self.return_to_home_page()
         self.entry_cache = None
 
@@ -213,3 +213,9 @@ class EntryHelper:
                      phone_mobile=phone_mobile,
                      phone_work=phone_work,
                      phone2_home=phone2_home)
+
+    def add_entry_in_group(self, id_entry, id_group):
+        wd = self.app.wd
+        self.select_entry_by_id(id_entry)
+        Select(wd.find_element_by_name("to_group")).select_by_value(id_group)
+        wd.find_element_by_name("add")
