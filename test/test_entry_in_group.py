@@ -15,7 +15,7 @@ def test_add_entry_in_group(app, orm, db, json_entries, json_groups, check_ui):
     selected_entry = random.choice(entries)
     entry.id = selected_entry.id
 
-    # group_without_entries = orm.get_groups_without_entries(selected_entry)
+    groups_without_selected_entry_before_add_entry = orm.get_groups_without_entry(selected_entry)
 
     groups = orm.get_groups_list()
     group = json_groups
@@ -23,25 +23,46 @@ def test_add_entry_in_group(app, orm, db, json_entries, json_groups, check_ui):
     group.id = selected_group.id
 
     app.entry.add_entry_in_group(entry.id, group.id)
+    entries_in_group = orm.get_entries_in_group(group)
+
+    groups_without_selected_entry_after_add_entry = orm.get_groups_without_entry(selected_entry)
+
+    assert len(groups_without_selected_entry_after_add_entry) == len(groups_without_selected_entry_before_add_entry) - 1
+    assert selected_entry in entries_in_group
+
+
+def test_delete_entry_from_group(app, orm, db, json_entries, json_groups, check_ui):
+    if len(orm.get_groups_list()) == 0:
+        initial_group = Group(name="test_group")
+        app.group.create_group(initial_group)
+
+        if len(orm.get_entries_list()) == 0:
+            initial_entry = Entry(first_name="test_entry")
+            app.entry.create_entry(initial_entry)
+            app.entry.add_entry_in_group(initial_entry.id, initial_group.id)
+
+    groups = orm.get_groups_list()
+    group = json_groups
+    selected_group = random.choice(groups)
+    group.id = selected_group.id
+
+    entries_in_selected_group = orm.get_entries_in_group(selected_group)
+    entry = json_entries
+
+    if len(entries_in_selected_group) == 0:
+        selected_entry = random.choice(app.entry.get_entries_list())
+        app.entry.add_entry_in_group(selected_entry.id, selected_group.id)
+
+    selected_entry = random.choice(entries_in_selected_group)
+    entry.id = selected_entry.id
+
+    groups_without_selected_entry_before_delete_entry = orm.get_groups_without_entry(selected_entry)
+
+    app.entry.delete_entry_from_group(entry.id, group.id)
 
     entries_in_group = orm.get_entries_in_group(group)
 
-    assert selected_entry in entries_in_group
+    groups_without_selected_entry_after_delete_entry = orm.get_groups_without_entry(selected_entry)
 
-    # new_entries = db.get_entries_list()
-
-    # assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)
-    # if check_ui:
-    #     assert sorted(new_entries, key=Entry.id_or_max) == sorted(app.entry.get_groups_list(), key=Entry.id_or_max)
-
-# def test_delete_entry_from_group(app, db, check_ui):
-#     if len(db.get_entries_list()) == 0:
-#         app.entry.create_entry(Entry(first_name="test"))
-#     old_entries = db.get_entries_list()
-#     entry = random.choice(old_entries)
-#     app.entry.delete_entry_by_id(entry.id)
-#     new_entries = db.get_entries_list()
-#     old_entries.remove(entry)
-#     assert old_entries == new_entries
-#     if check_ui:
-#         assert sorted(new_entries, key=Entry.id_or_max) == sorted(app.entry.get_group_list(), key=Entry.id_or_max)
+    assert len(groups_without_selected_entry_after_delete_entry) == len(groups_without_selected_entry_before_delete_entry) + 1
+    assert selected_entry not in entries_in_group

@@ -15,28 +15,28 @@ class EntryHelper:
         self.fill_entry_form(entry_data)
         # submit entry creation
         self.perform_action("submit")
-        self.return_to_home_page()
+        self.go_home_page()
         self.entry_cache = None
 
     def edit_first_entry(self, new_entry_data):
         self.edit_entry_by_index(0)
 
     def edit_entry_by_index(self, index, new_entry_data):
-        self.return_to_home_page()
+        self.go_home_page()
         self.select_entry_by_index_for_edit(index)
         self.fill_entry_form(new_entry_data)
         self.perform_action("update")
-        self.return_to_home_page()
+        self.go_home_page()
         self.entry_cache = None
 
     def edit_entry_by_id(self, id, new_entry_data):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         self.select_entry_by_id_for_edit(id)
         self.fill_entry_form(new_entry_data)
         self.perform_action("update")
-        wd.find_element_by_css_selector("div.msgbox") # wait the message about deletion
-        self.return_to_home_page()
+        wd.find_element_by_css_selector("div.msgbox")  # wait the message about deletion
+        self.go_home_page()
         self.entry_cache = None
 
     def select_first_entry_for_edit(self):
@@ -44,21 +44,21 @@ class EntryHelper:
 
     def select_entry_by_index_for_edit(self, index):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         row = wd.find_elements_by_name("entry")[index]
         cell = row.find_elements_by_tag_name("td")[7]
         cell.find_element_by_tag_name("a").click()
 
     def select_entry_by_id_for_edit(self, id):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
         # cell = row.find_element_by_tag_name("td")[7]
         # cell.find_element_by_tag_name("a").click()
 
     def select_entry_by_index_for_view(self, index):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         row = wd.find_elements_by_name("entry")[index]
         cell = row.find_elements_by_tag_name("td")[6]
         cell.find_element_by_tag_name("a").click()
@@ -108,23 +108,23 @@ class EntryHelper:
 
     def delete_entry_by_index(self, index):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         self.select_entry_by_index(index)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
-        self.return_to_home_page()
+        self.go_home_page()
         self.entry_cache = None
 
     def delete_entry_by_id(self, id):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         self.select_entry_by_id(id)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         wd.find_element_by_css_selector("div.msgbox")  # wait the message about deletion
-        self.return_to_home_page()
+        self.go_home_page()
         self.entry_cache = None
 
     def select_first_entry(self):
@@ -138,7 +138,7 @@ class EntryHelper:
         wd = self.app.wd
         wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
-    def return_to_home_page(self):
+    def go_home_page(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("searchstring")) > 0):
             wd.find_element_by_link_text("home").click()
@@ -149,7 +149,7 @@ class EntryHelper:
 
     def count(self):
         wd = self.app.wd
-        self.return_to_home_page()
+        self.go_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
     entry_cache = None
@@ -157,7 +157,7 @@ class EntryHelper:
     def get_entries_list(self):
         if self.entry_cache is None:
             wd = self.app.wd
-            self.return_to_home_page()
+            self.go_home_page()
             self.entry_cache = []
             for element in wd.find_elements_by_name("entry"):
                 cells = element.find_elements_by_tag_name("td")
@@ -214,8 +214,20 @@ class EntryHelper:
                      phone_work=phone_work,
                      phone2_home=phone2_home)
 
-    def add_entry_in_group(self, id_entry, id_group):
+    def add_entry_in_group(self, entry, group):
         wd = self.app.wd
-        self.select_entry_by_id(id_entry)
-        Select(wd.find_element_by_name("to_group")).select_by_value(id_group)
-        wd.find_element_by_name("add")
+        self.go_home_page()
+        self.select_entry_by_id(entry)
+        Select(wd.find_element_by_name("to_group")).select_by_value(str(group))
+        wd.find_element_by_name("add").click()
+        wd.find_element_by_css_selector("div.msgbox")  # wait the message about deletion
+
+    def delete_entry_from_group(self, entry, group):
+        wd = self.app.wd
+        self.go_home_page()
+        Select(wd.find_element_by_name("group")).select_by_value(str(group))
+        # wd.find_element_by_name("remove") # wait the table update
+        wd.find_element_by_css_selector("input[value='%s']" % entry).click()
+        wd.implicitly_wait(5)
+        wd.find_element_by_css_selector("input[type='submit']").click()
+        wd.find_element_by_css_selector("div.msgbox")  # wait the message about deletion
