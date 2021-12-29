@@ -88,5 +88,31 @@ class DbFixture:
             cursor.close()
         return list
 
+    def get_groups_without_entries(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select group_id, group_name from group_list "
+                           "where group_id not in (select group_id from address_in_groups)")
+            for row in cursor:
+                (id, name) = row
+                list.append(Group(id=str(id), name=name))
+        finally:
+            cursor.close()
+        return list
+
+    def get_entries_not_in_any_group(self):
+        list = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select id, firstname, lastname from addressbook "
+                           "where id not in (select id from address_in_groups)")
+            for row in cursor:
+                (id, firstname, lastname) = row
+                list.append(Entry(id=str(id), first_name=firstname, last_name=lastname))
+        finally:
+            cursor.close()
+        return list
+
     def destroy(self):
         self.connection.close()

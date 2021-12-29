@@ -39,7 +39,6 @@ class ORMFixture:
     def convert_groups_to_model(self, groups):
         def convert(group):
             return Group(id=str(group.id), name=group.name, header=group.header, footer=group.footer)
-
         return list(map(convert, groups))
 
     def convert_entries_to_model(self, entries):
@@ -54,7 +53,7 @@ class ORMFixture:
 
     @db_session
     def get_entries_list(self):
-        return self.convert_entries_to_model(select(e for e in ORMFixture.ORMEntry if str(e.deprecated) is None))
+        return self.convert_entries_to_model(select(e for e in ORMFixture.ORMEntry if e.deprecated is None))
 
     @db_session
     def get_entries_in_group(self, group):
