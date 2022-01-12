@@ -92,8 +92,7 @@ class DbFixture:
         list = []
         cursor = self.connection.cursor()
         try:
-            cursor.execute("select group_id, group_name from group_list "
-                           "where group_id not in (select group_id from address_in_groups)")
+            cursor.execute("select group_id, group_name from group_list where group_id not in (select group_id from address_in_groups)")
             for row in cursor:
                 (id, name) = row
                 list.append(Group(id=str(id), name=name))
