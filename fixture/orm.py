@@ -72,6 +72,19 @@ class ORMFixture:
         return self.convert_groups_to_model(orm_entry.groups)
 
     @db_session
-    def get_groups_without_entry(self, entry):
+    def get_groups_without_entries(self):
         orm_entry = list(select(e for e in ORMFixture.ORMEntry if e.id == entry.id))[0]
         return self.convert_groups_to_model(select(e for e in ORMFixture.ORMGroup if orm_entry not in e.entries))
+
+    @db_session
+    def get_entries_not_in_any_group(self, group):
+        orm_group = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))[0]
+        return self.convert_entries_to_model(
+            select(e for e in ORMFixture.ORMContact if orm_group not in e.groups))
+
+    @db_session
+    def get_groups_without_entries(self, entry):
+        orm_entry = list(select(e for e in ORMFixture.ORMEntry if e.id == entry.id))
+        return self.convert_groups_to_model(
+            select(g for g in ORMFixture.ORMGroupif if orm_entry not in g.entries))
+
