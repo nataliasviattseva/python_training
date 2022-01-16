@@ -1,0 +1,11 @@
+Build setup:
+http://prntscr.com/26e0080
+
+Build build (Conctruction de build):
+http://prntscr.com/26e026y
+
+Test results:
+http://prntscr.com/26e02ub
+
+Tests results (errors):
+http://prntscr.com/26e036a

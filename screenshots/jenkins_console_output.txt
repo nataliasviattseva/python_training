@@ -1,0 +1,386 @@
+Sortie de la console
+Started by user admin
+Running as SYSTEM
+Building in workspace C:\Users\user\.jenkins\workspace\addressbook tests
+The recommended git tool is: NONE
+No credentials specified
+ > C:\Program Files\Git\cmd\git.exe rev-parse --resolve-git-dir C:\Users\user\.jenkins\workspace\addressbook tests\.git # timeout=10
+Fetching changes from the remote Git repository
+ > C:\Program Files\Git\cmd\git.exe config remote.origin.url https://github.com/nataliasviattseva/python_training # timeout=10
+Fetching upstream changes from https://github.com/nataliasviattseva/python_training
+ > C:\Program Files\Git\cmd\git.exe --version # timeout=10
+ > git --version # 'git version 2.34.1.windows.1'
+ > C:\Program Files\Git\cmd\git.exe fetch --tags --force --progress -- https://github.com/nataliasviattseva/python_training +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > C:\Program Files\Git\cmd\git.exe rev-parse "refs/remotes/origin/main^{commit}" # timeout=10
+Checking out Revision 2ccfb5b34c3f493e852d130f97277f0ebd1f492c (refs/remotes/origin/main)
+ > C:\Program Files\Git\cmd\git.exe config core.sparsecheckout # timeout=10
+ > C:\Program Files\Git\cmd\git.exe checkout -f 2ccfb5b34c3f493e852d130f97277f0ebd1f492c # timeout=10
+Commit message: "10. Different tests writing styles and repots -> 27. BDD"
+ > C:\Program Files\Git\cmd\git.exe rev-list --no-walk 2ccfb5b34c3f493e852d130f97277f0ebd1f492c # timeout=10
+[addressbook tests] $ cmd.exe /c call C:\Users\user\AppData\Local\Temp\shiningpanda7780174277296044514.bat
+
+C:\Users\user\.jenkins\workspace\addressbook tests>pip install -r requirements.txt 
+ERROR: Invalid requirement: 'pytest_bdd 4.0.0' (from line 2 of requirements.txt)
+
+C:\Users\user\.jenkins\workspace\addressbook tests>py.test --junitxml=results.xml test\test_add_group.py test\test_add_entry.py test\test_del_entry.py test\test_del_group.py test\test_edit_entry.py test\test_edit_group.py test\test_phones.py 
+============================= test session starts =============================
+platform win32 -- Python 3.9.7, pytest-6.2.5, py-1.11.0, pluggy-1.0.0
+rootdir: C:\Users\user\.jenkins\workspace\addressbook tests
+plugins: bdd-5.0.0
+collected 10 items
+
+test\test_add_group.py FF                                                [ 20%]
+test\test_add_entry.py .                                                 [ 30%]
+test\test_del_entry.py F                                                 [ 40%]
+test\test_del_group.py .                                                 [ 50%]
+test\test_edit_entry.py .                                                [ 60%]
+test\test_edit_group.py ..                                               [ 80%]
+test\test_phones.py .F                                                   [100%]
+
+================================== FAILURES ===================================
+___________________________ test_add_group[None:;;] ___________________________
+
+app = <fixture.application.Application object at 0x0000026B343BED30>
+db = <fixture.db.DbFixture object at 0x0000026B343AED30>, json_groups = None:;;
+check_ui = False
+
+    def test_add_group(app, db, json_groups, check_ui):
+        group = json_groups
+>       with pytest.allure.step("Given a group list"):
+E       AttributeError: module 'pytest' has no attribute 'allure'
+
+test\test_add_group.py:6: AttributeError
+_____________ test_add_group[None:nameG ;headerD5BEI1;footergDhw] _____________
+
+app = <fixture.application.Application object at 0x0000026B343BED30>
+db = <fixture.db.DbFixture object at 0x0000026B343AED30>
+json_groups = None:nameG ;headerD5BEI1;footergDhw, check_ui = False
+
+    def test_add_group(app, db, json_groups, check_ui):
+        group = json_groups
+>       with pytest.allure.step("Given a group list"):
+E       AttributeError: module 'pytest' has no attribute 'allure'
+
+test\test_add_group.py:6: AttributeError
+___________________________ test_delete_some_entry ____________________________
+
+app = <fixture.application.Application object at 0x0000026B343BED30>
+db = <fixture.db.DbFixture object at 0x0000026B343AED30>, check_ui = False
+
+    def test_delete_some_entry(app, db, check_ui):
+        if len(db.get_entries_list()) == 0:
+            app.entry.create_entry(Entry(first_name="test"))
+        old_entries = db.get_entries_list()
+        entry = random.choice(old_entries)
+>       app.entry.delete_entry_by_id(entry.id)
+
+test\test_del_entry.py:11: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <fixture.entry.EntryHelper object at 0x0000026B343C36D0>, id = '313'
+
+    def delete_entry_by_id(self, id):
+        wd = self.app.wd
+        self.go_home_page()
+        self.select_entry_by_id(id)
+        # submit deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+>       wd.switch_to_alert().accept()
+E       AttributeError: 'WebDriver' object has no attribute 'switch_to_alert'
+
+fixture\entry.py:125: AttributeError
+______________________ test_phones_on_contact_view_pages ______________________
+
+app = <fixture.application.Application object at 0x0000026B344A99D0>
+
+    def test_phones_on_contact_view_pages(app):
+        contact_from_view_page = app.entry.get_entry_info_from_view_page(0)
+        contact_from_edit_page = app.entry.get_entry_info_from_edit_page(0)
+        assert contact_from_view_page.phone_home == contact_from_edit_page.phone_home
+        assert contact_from_view_page.phone_mobile == contact_from_edit_page.phone_mobile
+        assert contact_from_view_page.phone_work == contact_from_edit_page.phone_work
+>       assert contact_from_view_page.phone2_home == contact_from_edit_page.phone2_home
+E       AssertionError: assert '5) 36' == ' 5) 36 '
+E         -  5) 36 
+E         ? -     -
+E         + 5) 36
+
+test\test_phones.py:16: AssertionError
+============================== warnings summary ===============================
+..\..\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\pony\thirdparty\compiler\transformer.py:32
+  c:\users\user\.jenkins\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\pony\thirdparty\compiler\transformer.py:32: DeprecationWarning: The parser module is deprecated and will be removed in future versions of Python
+    import parser
+
+..\..\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\pony\thirdparty\compiler\transformer.py:33
+  c:\users\user\.jenkins\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\pony\thirdparty\compiler\transformer.py:33: DeprecationWarning: The symbol module is deprecated and will be removed in future versions of Python
+    import symbol
+
+test/test_add_group.py: 2 warnings
+test/test_add_entry.py: 1 warning
+test/test_del_entry.py: 1 warning
+test/test_del_group.py: 1 warning
+test/test_edit_entry.py: 1 warning
+test/test_edit_group.py: 2 warnings
+test/test_phones.py: 3 warnings
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:23: DeprecationWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    return len(wd.find_elements_by_link_text("Logout")) > 0
+
+test/test_add_group.py::test_add_group[None:;;]
+test/test_del_group.py::test_delete_some_group
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:9: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("user").clear()
+
+test/test_add_group.py::test_add_group[None:;;]
+test/test_del_group.py::test_delete_some_group
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:10: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("user").send_keys(username)
+
+test/test_add_group.py::test_add_group[None:;;]
+test/test_del_group.py::test_delete_some_group
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:11: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("pass").clear()
+
+test/test_add_group.py::test_add_group[None:;;]
+test/test_del_group.py::test_delete_some_group
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:12: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("pass").send_keys(password)
+
+test/test_add_group.py::test_add_group[None:;;]
+test/test_del_group.py::test_delete_some_group
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:13: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_xpath("//input[@value='Login']").click()
+
+test/test_add_group.py::test_add_group[None:nameG ;headerD5BEI1;footergDhw]
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_del_entry.py::test_delete_some_entry
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:31: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    return wd.find_element_by_xpath("//div[@id='top']/form/b").text[1:-1]
+
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:14: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_link_text("add new").click()
+
+test/test_add_entry.py: 20 warnings
+test/test_edit_entry.py: 20 warnings
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:98: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name(field_name).clear()
+
+test/test_add_entry.py: 20 warnings
+test/test_edit_entry.py: 20 warnings
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:99: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name(field_name).send_keys(text)
+
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:104: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    Select(wd.find_element_by_name(field_name)).select_by_visible_text(text)
+
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:148: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name(action).click()
+
+test/test_add_entry.py::test_add_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:144: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_link_text("home").click()
+
+test/test_del_entry.py::test_delete_some_entry
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+test/test_phones.py::test_phones_on_home_page
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:143: DeprecationWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("searchstring")) > 0):
+
+test/test_del_entry.py::test_delete_some_entry
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:139: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
+test/test_del_entry.py::test_delete_some_entry
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:124: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_xpath("//input[@value='Delete']").click()
+
+test/test_del_group.py::test_delete_some_group
+test/test_edit_group.py::test_edit_some_group[None:;;]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:12: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_link_text("groups").click()
+
+test/test_del_group.py::test_delete_some_group
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:94: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
+test/test_del_group.py::test_delete_some_group
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:80: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("delete").click()
+
+test/test_del_group.py::test_delete_some_group
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:98: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_link_text("group page").click()
+
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:55: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
+
+test/test_edit_entry.py::test_edit_some_entry[None:FirstName p vxU4g:LastNameA]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:38: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_css_selector("div.msgbox")  # wait the message about deletion
+
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:45: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("edit").click()
+
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:60: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name(field_name).clear()
+
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:61: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name(field_name).send_keys(text)
+
+test/test_edit_group.py::test_edit_some_group[None:;;]
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:48: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("update").click()
+
+test/test_edit_group.py::test_edit_some_group[None:nameG ;headerD5BEI1;footergDhw]
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\group.py:11: DeprecationWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
+
+test/test_phones.py::test_phones_on_home_page
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:162: DeprecationWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    for element in wd.find_elements_by_name("entry"):
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  c:\users\user\.jenkins\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\selenium\webdriver\remote\webelement.py:359: UserWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    warnings.warn("find_elements_by_* commands are deprecated. Please use find_elements() instead")
+
+test/test_phones.py::test_phones_on_home_page
+  c:\users\user\.jenkins\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\selenium\webdriver\remote\webelement.py:227: UserWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    warnings.warn("find_element_by_* commands are deprecated. Please use find_element() instead")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:48: DeprecationWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    row = wd.find_elements_by_name("entry")[index]
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  c:\users\user\.jenkins\shiningpanda\jobs\62ae2d4d\virtualenvs\d41d8cd9\lib\site-packages\selenium\webdriver\remote\webelement.py:341: UserWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    warnings.warn("find_element_by_* commands are deprecated. Please use find_element() instead")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:181: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    first_name = wd.find_element_by_name("firstname").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:182: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    last_name = wd.find_element_by_name("lastname").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:183: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    id = wd.find_element_by_name("id").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:184: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    address = wd.find_element_by_name("address").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:185: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    email1 = wd.find_element_by_name("email").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:186: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    email2 = wd.find_element_by_name("email2").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:187: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    email3 = wd.find_element_by_name("email3").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:188: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    phone_home = wd.find_element_by_name("home").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:189: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    phone_mobile = wd.find_element_by_name("mobile").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:190: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    phone_work = wd.find_element_by_name("work").get_attribute("value")
+
+test/test_phones.py::test_phones_on_home_page
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:191: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    phone2_home = wd.find_element_by_name("phone2").get_attribute("value")
+
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:62: DeprecationWarning: find_elements_by_* commands are deprecated. Please use find_elements() instead
+    row = wd.find_elements_by_name("entry")[index]
+
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\entry.py:207: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    text = wd.find_element_by_id("content").text
+
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:17: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_link_text("Logout").click()
+
+test/test_phones.py::test_phones_on_contact_view_pages
+  C:\Users\user\.jenkins\workspace\addressbook tests\fixture\session.py:19: DeprecationWarning: find_element_by_* commands are deprecated. Please use find_element() instead
+    wd.find_element_by_name("user")
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+- generated xml file: C:\Users\user\.jenkins\workspace\addressbook tests\results.xml -
+=========================== short test summary info ===========================
+FAILED test/test_add_group.py::test_add_group[None:;;] - AttributeError: modu...
+FAILED test/test_add_group.py::test_add_group[None:nameG ;headerD5BEI1;footergDhw]
+FAILED test/test_del_entry.py::test_delete_some_entry - AttributeError: 'WebD...
+FAILED test/test_phones.py::test_phones_on_contact_view_pages - AssertionErro...
+============ 4 failed, 6 passed, 195 warnings in 77.52s (0:01:17) =============
+
+C:\Users\user\.jenkins\workspace\addressbook tests>exit 1 
+Process leaked file descriptors. See https://www.jenkins.io/redirect/troubleshooting/process-leaked-file-descriptors for more information
+Build step 'Virtualenv Builder' marked build as failure
+Recording test results
+[Checks API] No suitable checks publisher found.
+Finished: FAILURE
