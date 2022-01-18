@@ -1,5 +1,5 @@
 pytest
-pytest_bdd
+pytest_bdd==4.0.0
 selenium
 jsonpickle
 pymysql
@@ -7,3 +7,4 @@ mysql-connector-python-rf
 pony
 lxml-4.7.1-cp39-cp39-win_amd64.whl
 allure-pytest
+robotframework

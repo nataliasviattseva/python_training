@@ -1,0 +1,1 @@
+robot -P . rf\group_scenarios.robot rf\entry_scenarios.robot
