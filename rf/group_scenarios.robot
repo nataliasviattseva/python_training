@@ -19,12 +19,12 @@ Edit group
     ${len}=                         Get Length              ${old_list}
     ${index}=                       Evaluate                random.randrange(${len})           random
     ${selected_group}=              Get From List           ${old_list}      ${index}
-    ${new_group}=                   New Group               name_edited      header_edited     footer_edited
+    ${new_group}=                   New Group Edited        ${index}         name_edited      header_edited     footer_edited
     Edit Group                      ${selected_group}       ${new_group}
     ${new_list}=                    Get Groups List
     Remove Values From List         ${old_list}             ${selected_group}
     Append To List                  ${old_list}             ${new_group}
-    Lists Should Be Equal           ${new_list}             ${old_list}
+    Sorted Lists Should Be Equal    ${new_list}             ${old_list}
 
 Delete group
     ${old_list}=                    Get Groups List

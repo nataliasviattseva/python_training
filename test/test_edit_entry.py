@@ -1,4 +1,4 @@
-from model.entry import Entry
+from model.entry imsorted(old_entries, key=Entry.id_or_max)port Entry
 import random
 
 
@@ -13,6 +13,6 @@ def test_edit_some_entry(app, db, json_entries, check_ui):
     new_entries = db.get_entries_list()
     old_entries.remove(selected_entry)
     old_entries.append(entry)
-    assert sorted(old_entries, key=Entry.id_or_max) == sorted(new_entries, key=Entry.id_or_max)
+    assert  == sorted(new_entries, key=Entry.id_or_max)
     if check_ui:
         assert sorted(new_entries, key=Entry.id_or_max) == sorted(app.entry.get_entries_list(), key=Entry.id_or_max)
